@@ -1,10 +1,11 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import { deleteNote, checkNote, EditModal } from "@/components";
+import { useShallowEffect, useDebouncedState } from "@mantine/hooks";
 
 const Card = ({ data }) => {
-  const [checked, setChecked] = useState(data.is_checked);
+  const [checked, setChecked] = useDebouncedState(data.is_checked, 200);
   const checkRef = useRef();
 
   const handleCheck = () => {
@@ -16,7 +17,7 @@ const Card = ({ data }) => {
 
   const date = new Date(data.last_updated).toDateString();
 
-  useEffect(() => {
+  useShallowEffect(() => {
     if (checkRef.current) {
       checkRef.current.checked = checked;
     }

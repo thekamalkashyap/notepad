@@ -21,7 +21,11 @@ const AddModal = () => {
         <span>Add Note</span>
       </label>
       <input type="checkbox" id={"addnote"} className="modal-toggle" />
-      <label htmlFor={"addnote"} className="modal cursor-pointer">
+      <label
+        id="modal-addnote"
+        htmlFor={"addnote"}
+        className="modal cursor-pointer"
+      >
         <label className="modal-box relative" htmlFor={"addnote"}>
           <label
             htmlFor={"addnote"}

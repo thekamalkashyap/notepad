@@ -2,9 +2,11 @@
 import React, { useRef } from "react";
 import Image from "next/image";
 import { editNote } from "@/components";
+import { useDisclosure } from "@mantine/hooks";
 
 const EditModal = ({ data }) => {
   const descriptionRef = useRef();
+  const [opened, handlers] = useDisclosure(false);
 
   function auto_grow() {
     descriptionRef.current.style.height = "6rem";
@@ -12,21 +14,17 @@ const EditModal = ({ data }) => {
       descriptionRef.current.scrollHeight + "px";
   }
 
-  const handleEditBtn = () => {
-    document.getElementById(`modal${data?.id}`).classList.toggle("modal-open");
-  };
-
-  const handleEditCrossBtn = () => {
-    document.getElementById(`modal${data?.id}`).classList.remove("modal-open");
-  };
-
   const hanldeSubmit = (formData) => {
     editNote(formData, data.id);
   };
 
   return (
     <>
-      <button onClick={handleEditBtn}>
+      <button
+        onClick={() => {
+          handlers.toggle();
+        }}
+      >
         <Image
           className="cursor-pointer"
           src={"/pen.svg"}
@@ -36,10 +34,15 @@ const EditModal = ({ data }) => {
           blurDataURL={"/pen.svg"}
         />
       </button>
-      <div id={`modal${data?.id}`} className="modal cursor-pointer">
+      <div
+        id={`modal${data?.id}`}
+        className={`modal ${opened && "modal-open"} cursor-pointer`}
+      >
         <div className="modal-box relative">
           <div
-            onClick={handleEditCrossBtn}
+            onClick={() => {
+              handlers.close();
+            }}
             className="btn btn-sm btn-circle absolute right-2 top-2"
           >
             ✕

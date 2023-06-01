@@ -9,7 +9,7 @@ module.exports = {
     extend: {},
   },
   daisyui: {
-    themes: ["dracula"],
+    themes: ["luxury"],
   },
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
 };
