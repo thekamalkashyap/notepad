@@ -1,16 +1,20 @@
 "use client";
 import React from "react";
-
-const Search = () => {
+const Search = ({ setState }) => {
+  const handleSubmit = (formData) => {
+    const search = formData.get("search");
+    setState({ search });
+  };
   return (
     <div className="form-control w-full">
-      <div className="input-group">
+      <form action={handleSubmit} id="searchForm" className="input-group">
         <input
           type="text"
+          name="search"
           placeholder="Search…"
           className="input focus:outline-none w-full input-bordered"
         />
-        <button className="btn w-24 btn-square">
+        <button type="submit" className="btn w-24 btn-square">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
@@ -26,7 +30,7 @@ const Search = () => {
             />
           </svg>
         </button>
-      </div>
+      </form>
     </div>
   );
 };

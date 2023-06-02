@@ -1,4 +1,5 @@
 import "./globals.css";
+import { NoteProvider } from "@/components/context";
 
 export const metadata = {
   title: "Create Next App",
@@ -8,7 +9,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="prose max-w-none">{children}</body>
+      <body className="prose max-w-none">
+        <NoteProvider>{children}</NoteProvider>
+      </body>
     </html>
   );
 }

@@ -2,9 +2,11 @@
 import React, { useRef } from "react";
 import Image from "next/image";
 import { addNote } from "@/components";
+import { useNote } from "./context";
 
 const AddModal = () => {
   const descriptionRef = useRef();
+  const { rerender } = useNote();
   function auto_grow() {
     descriptionRef.current.style.height = "6rem";
     descriptionRef.current.style.height =
@@ -13,6 +15,7 @@ const AddModal = () => {
   const handleSubmit = (formData) => {
     addNote(formData);
     document.getElementById(`form-addnote`).reset();
+    rerender();
   };
   return (
     <>

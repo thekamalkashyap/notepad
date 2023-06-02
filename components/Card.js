@@ -3,17 +3,23 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import { deleteNote, checkNote, EditModal } from "@/components";
 import { useShallowEffect, useDebouncedState } from "@mantine/hooks";
+import { useNote } from "./context";
 
 const Card = ({ data }) => {
   const [checked, setChecked] = useDebouncedState(data.is_checked, 200);
   const checkRef = useRef();
+  const { rerender } = useNote();
 
   const handleCheck = () => {
     setChecked((prev) => !prev);
     checkNote(data.id, !checked);
+    rerender();
   };
 
-  const handleDelete = () => deleteNote(data.id);
+  const handleDelete = () => {
+    deleteNote(data.id);
+    rerender();
+  };
 
   const date = new Date(data.last_updated).toDateString();
 

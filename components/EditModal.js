@@ -3,10 +3,12 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import { editNote } from "@/components";
 import { useDisclosure } from "@mantine/hooks";
+import { useNote } from "./context";
 
 const EditModal = ({ data }) => {
   const descriptionRef = useRef();
   const [opened, handlers] = useDisclosure(false);
+  const { rerender } = useNote();
 
   function auto_grow() {
     descriptionRef.current.style.height = "6rem";
@@ -16,6 +18,7 @@ const EditModal = ({ data }) => {
 
   const hanldeSubmit = (formData) => {
     editNote(formData, data.id);
+    rerender();
   };
 
   return (
