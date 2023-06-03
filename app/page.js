@@ -1,11 +1,28 @@
 "use client";
 import { AddModal, Card, Search, allNotes } from "@/components";
 import { Suspense } from "react";
-import { useShallowEffect, useSetState } from "@mantine/hooks";
+import {
+  useShallowEffect,
+  useSetState,
+  useFavicon,
+  useToggle,
+  useInterval,
+  useDocumentTitle,
+} from "@mantine/hooks";
 import { useNote } from "@/components/context";
 
 export default function Home() {
   const [state, setState] = useSetState({ search: "", notes: [] });
+  const [value, toggle] = useToggle(["1", "2", "3", "4", "5", "6", "7", "8"]);
+  const interval = useInterval(() => toggle(), 500);
+
+  useShallowEffect(() => {
+    interval.start();
+    return interval.stop;
+  }, []);
+
+  useFavicon(`/moon/${value}.svg`);
+
   const { forceUpdate } = useNote();
 
   const fetchData = async () => {
