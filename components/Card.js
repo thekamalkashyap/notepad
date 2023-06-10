@@ -22,7 +22,10 @@ const Card = ({ data }) => {
   };
 
   const date = new Date(data.last_updated).toDateString();
-
+  const time = new Date(data.last_updated);
+  const formatedTime = `${
+    time.getHours() % 12 == 0 ? 12 : time.getHours() % 12
+  }:${time.getMinutes()}`;
   useShallowEffect(() => {
     if (checkRef.current) {
       checkRef.current.checked = checked;
@@ -69,7 +72,7 @@ const Card = ({ data }) => {
         </h2>
         <p className={`${checked && "line-through"}`}>{data.body}</p>
         <div className="card-actions justify-end">
-          <div className="badge py-4 px-6 badge-outline">{date}</div>
+          <div className="badge py-4 px-6 badge-outline">{date} {formatedTime}</div>
         </div>
       </div>
     </div>

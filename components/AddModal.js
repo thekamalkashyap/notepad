@@ -7,16 +7,19 @@ import { useNote } from "./context";
 const AddModal = () => {
   const descriptionRef = useRef();
   const { rerender } = useNote();
+
   function auto_grow() {
     descriptionRef.current.style.height = "6rem";
     descriptionRef.current.style.height =
       descriptionRef.current.scrollHeight + "px";
   }
+
   const handleSubmit = (formData) => {
     addNote(formData);
     document.getElementById(`form-addnote`).reset();
     rerender();
   };
+
   return (
     <>
       <label htmlFor={"addnote"} className={`btn gap-x-3 flex-nowrap `}>

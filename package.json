@@ -12,12 +12,15 @@
     "@emotion/react": "^11.11.0",
     "@mantine/hooks": "^6.0.13",
     "autoprefixer": "10.4.14",
+    "bcryptjs": "^2.4.3",
     "daisyui": "^2.51.6",
+    "jsonwebtoken": "^9.0.0",
     "next": "13.4.4",
     "postcss": "8.4.23",
     "postgres": "^3.3.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.44.3",
     "tailwindcss": "3.3.2"
   },
   "devDependencies": {

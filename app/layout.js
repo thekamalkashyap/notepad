@@ -8,6 +8,7 @@ export const metadata = {
   applicationName: "KNote",
   referrer: "origin-when-cross-origin",
   keywords: ["Next.js", "React", "JavaScript"],
+  icons:'/moon/1.svg',
   authors: [
     { name: "kamal kashyap", url: "https://github.com/thekamalkashyap" },
   ],
