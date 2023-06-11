@@ -1,7 +1,7 @@
 "use client";
-import { useNote } from "@/components/context";
 import { useForm } from "react-hook-form";
 import { checkUser, addUser } from "../func";
+import { useNote } from "@/components/context";
 
 const page = () => {
   const { setUser } = useNote();

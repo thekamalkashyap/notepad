@@ -1,7 +1,7 @@
 "use client";
-import { useNote } from "@/components/context";
 import { useForm } from "react-hook-form";
 import { checkUser, getUser } from "../func";
+import { useNote } from "@/components/context";
 
 const page = () => {
   const { setUser } = useNote();
@@ -14,10 +14,10 @@ const page = () => {
   const handleFrom = async (data) => {
     const registered = await checkUser(data?.email);
     if (registered) {
-      await getUser(data, registered);
+      getUser(data, registered);
       setUser({
-        firstName: registered?.first_name,
-        lastName: registered?.last_name,
+        firstName: registered?.firstName,
+        lastName: registered?.lastName,
         email: registered?.email,
       });
     } else {

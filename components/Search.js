@@ -1,6 +1,9 @@
 "use client";
 import React from "react";
-const Search = ({ setState }) => {
+import { useNote } from "./context";
+
+const Search = () => {
+  const { setState } = useNote();
   const handleSubmit = (formData) => {
     const search = formData.get("search");
     setState({ search });

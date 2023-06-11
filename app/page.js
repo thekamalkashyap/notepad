@@ -1,9 +1,8 @@
 "use client";
-import { AddModal, Card, Search, allNotes } from "@/components";
+import { AddModal, Card, allNotes } from "@/components";
 import { Suspense } from "react";
 import {
   useShallowEffect,
-  useSetState,
   useFavicon,
   useToggle,
   useInterval,
@@ -11,22 +10,17 @@ import {
 import { useNote } from "@/components/context";
 
 export default function Home() {
-  const [state, setState] = useSetState({
-    search: "",
-    notes: [],
-    completedNotes: 0,
-    totalNotes: 0,
-  });
-  // const [value, toggle] = useToggle([...Array(8).keys()]);
-  // const interval = useInterval(() => toggle(), 500);
-  const { forceUpdate } = useNote();
+  const { state, setState } = useNote();
+  const [value, toggle] = useToggle([...Array(8).keys()]);
+  const interval = useInterval(() => toggle(), 500);
+  const { forceUpdate, user } = useNote();
 
-  // useShallowEffect(() => {
-  //   interval.start();
-  //   return interval.stop;
-  // }, []);
+  useShallowEffect(() => {
+    interval.start();
+    return interval.stop;
+  }, []);
 
-  // useFavicon(`/moon/${value + 1}.svg`);
+  useFavicon(`/moon/${value + 1}.svg`);
 
   const fetchData = async () => {
     let notes = [];
@@ -52,18 +46,19 @@ export default function Home() {
 
   return (
     <main className=" flex gap-y-10 flex-col justify-center items-end px-24 py-10 ">
-      <Search setState={setState} />
-      <AddModal />
       {/* Progress  */}
-      <div className="w-full">
-        <h4>
-          {state.completedNotes} completed out of {state?.totalNotes}
-        </h4>
-        <progress
-          className="progress progress-success "
-          value={state.completedNotes}
-          max={state.totalNotes}
-        />
+      <div className="flex gap-x-4 items-center w-full">
+        <div className="w-full">
+          <h4 className="my-0">
+            {state.completedNotes} completed out of {state?.totalNotes}
+          </h4>
+          <progress
+            className="progress progress-success "
+            value={state.completedNotes}
+            max={state.totalNotes}
+          />
+        </div>
+        <AddModal />
       </div>
 
       {/* notes  */}

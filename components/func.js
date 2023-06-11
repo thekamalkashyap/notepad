@@ -9,7 +9,7 @@ async function allNotes() {
   if (token) {
     const data = jwt.verify(token, process.env.SECRET_KEY);
     const email = data?.email;
-    const todos = await sql`select * from notes where uid = ${email}`;
+    const todos = await sql`select * from notes where uid = ${email} order by is_checked, last_updated desc`;
     return todos;
   }
 }
