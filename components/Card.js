@@ -5,24 +5,24 @@ import { deleteNote, checkNote, EditModal } from "@/components";
 import { useShallowEffect, useDebouncedState } from "@mantine/hooks";
 import { useNote } from "./context";
 
-const Card = ({ data }) => {
-  const [checked, setChecked] = useDebouncedState(data.is_checked, 200);
+const Card = ({ id, is_checked, title, body, last_updated }) => {
+  const [checked, setChecked] = useDebouncedState(is_checked, 200);
   const checkRef = useRef();
   const { rerender } = useNote();
 
   const handleCheck = () => {
     setChecked((prev) => !prev);
-    checkNote(data.id, !checked);
+    checkNote(id, !checked);
     rerender();
   };
 
   const handleDelete = () => {
-    deleteNote(data.id);
+    deleteNote(id);
     rerender();
   };
 
-  const date = new Date(data.last_updated).toDateString();
-  const time = new Date(data.last_updated);
+  const date = new Date(last_updated).toDateString();
+  const time = new Date(last_updated);
   const formatedTime = `${
     time.getHours() % 12 == 0 ? 12 : time.getHours() % 12
   }:${time.getMinutes()}`;
@@ -56,7 +56,7 @@ const Card = ({ data }) => {
             </label>
           </div>
           <div className="flex gap-x-8">
-            <EditModal data={data} />
+            <EditModal id={id} title={title} body={body} />
             <Image
               className="cursor-pointer"
               onClick={handleDelete}
@@ -68,11 +68,13 @@ const Card = ({ data }) => {
           </div>
         </div>
         <h2 className={`card-title mt-0 ${checked && "line-through"}`}>
-          {data.title}
+          {title}
         </h2>
-        <p className={`${checked && "line-through"}`}>{data.body}</p>
+        <p className={`${checked && "line-through"}`}>{body}</p>
         <div className="card-actions justify-end">
-          <div className="badge py-4 px-6 badge-outline">{date} {formatedTime}</div>
+          <div className="badge py-4 px-6 badge-outline">
+            {date} {formatedTime}
+          </div>
         </div>
       </div>
     </div>

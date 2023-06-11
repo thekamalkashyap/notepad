@@ -5,7 +5,7 @@ import { editNote } from "@/components";
 import { useDisclosure } from "@mantine/hooks";
 import { useNote } from "./context";
 
-const EditModal = ({ data }) => {
+const EditModal = ({ id, title, body }) => {
   const descriptionRef = useRef();
   const [opened, handlers] = useDisclosure(false);
   const { rerender } = useNote();
@@ -17,7 +17,7 @@ const EditModal = ({ data }) => {
   }
 
   const hanldeSubmit = (formData) => {
-    editNote(formData, data.id);
+    editNote(formData, id);
     rerender();
   };
 
@@ -38,7 +38,7 @@ const EditModal = ({ data }) => {
         />
       </button>
       <div
-        id={`modal${data?.id}`}
+        id={`modal${id}`}
         className={`modal ${opened && "modal-open"} cursor-pointer`}
       >
         <div className="modal-box relative">
@@ -52,7 +52,7 @@ const EditModal = ({ data }) => {
           </div>
           <form
             className="flex gap-y-4 flex-col"
-            id={`form-editnote${data?.id}`}
+            id={`form-editnote${id}`}
             action={hanldeSubmit}
           >
             <div className="form-control w-full max-w-xs">
@@ -62,7 +62,7 @@ const EditModal = ({ data }) => {
               <input
                 type="text"
                 name="title"
-                defaultValue={data?.title}
+                defaultValue={title}
                 placeholder="Lorem ipsum"
                 className="input focus:outline-none input-bordered w-full max-w-xs"
               />
@@ -74,7 +74,7 @@ const EditModal = ({ data }) => {
               <textarea
                 name="body"
                 ref={descriptionRef}
-                defaultValue={data?.body}
+                defaultValue={body}
                 className="textarea resize-none overflow-hidden focus:outline-none textarea-bordered h-24"
                 onInput={auto_grow}
                 placeholder="Lorem ipsum sbi ajbsns, osih sjois!"

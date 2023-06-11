@@ -17,29 +17,16 @@ export default function Home() {
     completedNotes: 0,
     totalNotes: 0,
   });
-  const [value, toggle] = useToggle([...Array(8).keys()]);
-  const interval = useInterval(() => toggle(), 500);
+  // const [value, toggle] = useToggle([...Array(8).keys()]);
+  // const interval = useInterval(() => toggle(), 500);
   const { forceUpdate } = useNote();
 
-  useShallowEffect(() => {
-    interval.start();
-    return interval.stop;
-  }, []);
-
-  useFavicon(`/moon/${value + 1}.svg`);
-
   // useShallowEffect(() => {
-  //   let func = async () => {
-  //     const email = await getEmail();
-  //     const user = await checkUser(email);
-  //     setUser({
-  //       first_name: user?.firstName,
-  //       last_name: user?.lastName,
-  //       email: user?.email,
-  //     });
-  //   };
-  //   func();
+  //   interval.start();
+  //   return interval.stop;
   // }, []);
+
+  // useFavicon(`/moon/${value + 1}.svg`);
 
   const fetchData = async () => {
     let notes = [];
@@ -82,9 +69,15 @@ export default function Home() {
       {/* notes  */}
       <div className="flex w-full justify-center items-center flex-wrap gap-6">
         <Suspense fallback={<p className="flex justify-center">loading...</p>}>
-          {state?.notes.map((data) => (
-            <div key={data.id}>
-              <Card data={data} />
+          {state?.notes.map(({ id, is_checked, title, body, last_updated }) => (
+            <div key={id}>
+              <Card
+                id={id}
+                is_checked={is_checked}
+                body={body}
+                last_updated={last_updated}
+                title={title}
+              />
             </div>
           ))}
         </Suspense>
