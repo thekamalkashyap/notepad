@@ -24,6 +24,7 @@ async function getUser(formData, userData) {
         if (res) {
           const token = jwt.sign({ email }, process.env.SECRET_KEY);
           cookieStore.set("jsonwebtoken", token);
+          console.log(`user Signed in!`);
         }
       });
     } else {
@@ -43,7 +44,7 @@ async function getEmail() {
   }
 }
 
-function addUser(data) {
+async function addUser(data) {
   const cookieStore = cookies();
   const email = data.email;
   bcrypt.hash(data.password, 8, async function (err, hash) {
@@ -64,4 +65,9 @@ function addUser(data) {
   console.log(`new user added!`);
 }
 
-export { addUser, checkUser, getEmail, getUser };
+async function logout() {
+  const cookieStore = cookies();
+  cookieStore.delete("jsonwebtoken");
+}
+
+export { addUser, checkUser, getEmail, getUser, logout };

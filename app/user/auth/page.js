@@ -24,7 +24,7 @@ const page = () => {
       }
     } else {
       if (registered) {
-        getUser(data, registered);
+        await getUser(data, registered);
         setUser({ email: registered?.email });
       } else {
         alert("user not exists");
@@ -37,7 +37,7 @@ const page = () => {
       <div className="tabs">
         <h2
           onClick={() => toggle(true)}
-          className={`tab my-0 ${tab && "tab-active"} tab-lifted`}
+          className={`tab my-0 tab-lifted ${tab && "tab-active"}`}
         >
           Signin
         </h2>

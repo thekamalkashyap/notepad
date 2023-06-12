@@ -1,27 +1,12 @@
 "use client";
 import { AddModal, Card, allNotes } from "@/components";
-import {
-  useShallowEffect,
-  useFavicon,
-  useToggle,
-  useInterval,
-} from "@mantine/hooks";
+import { useShallowEffect } from "@mantine/hooks";
 import { useNote } from "@/components/context";
-import Link from "next/link";
 import { Suspense } from "react";
 
 export default function Home() {
   const { state, setState } = useNote();
-  const [value, toggle] = useToggle([...Array(8).keys()]);
-  const interval = useInterval(() => toggle(), 500);
   const { forceUpdate } = useNote();
-
-  useShallowEffect(() => {
-    interval.start();
-    return interval.stop;
-  }, []);
-
-  useFavicon(`/moon/${value + 1}.svg`);
 
   useShallowEffect(() => {
     const fetchData = async () => {
@@ -46,7 +31,6 @@ export default function Home() {
 
   return (
     <main className=" flex gap-y-10 flex-col justify-center items-end px-24 py-10 ">
-      <Link href={"/user/auth"}>login</Link>
       {/* Progress  */}
       <div className="flex gap-x-4 items-center w-full">
         <div className="w-full">

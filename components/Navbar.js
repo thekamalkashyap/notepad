@@ -3,9 +3,16 @@ import React from "react";
 import Link from "next/link";
 import Search from "./Search";
 import { useNote } from "./context";
+import { logout } from "@/app/user/func";
 
 const Navbar = () => {
-  const { user } = useNote();
+  const { user, setUser, setState } = useNote();
+
+  const handleLogout = async () => {
+    await logout();
+    setUser({ email: "" });
+    setState({ notes: [], completedNotes: 0, totalNotes: 0 });
+  };
 
   return (
     <div className="navbar pt-6 px-24 bg-base-100">
@@ -46,9 +53,12 @@ const Navbar = () => {
             </li>
             {user.email && (
               <li>
-                <Link href={"/"} className=" no-underline ">
+                <button
+                  onClick={() => handleLogout()}
+                  className=" no-underline "
+                >
                   Logout
-                </Link>
+                </button>
               </li>
             )}
           </ul>
