@@ -1,10 +1,12 @@
 "use client";
 import { useForm } from "react-hook-form";
-import { checkUser, getUser } from "../func";
+import { checkUser, addUser, getUser } from "../func";
 import { useNote } from "@/components/context";
+import { useState } from "react";
 
 const page = () => {
   const { setUser } = useNote();
+  const [tab, toggle] = useState(true);
   const {
     register,
     handleSubmit,
@@ -13,20 +15,39 @@ const page = () => {
 
   const handleFrom = async (data) => {
     const registered = await checkUser(data?.email);
-    if (registered) {
-      getUser(data, registered);
-      setUser({
-        firstName: registered?.firstName,
-        lastName: registered?.lastName,
-        email: registered?.email,
-      });
+    if (!tab) {
+      if (!registered) {
+        addUser(data);
+        setUser({ email: data?.email });
+      } else {
+        alert("user already exists");
+      }
     } else {
-      alert("user not exists");
+      if (registered) {
+        getUser(data, registered);
+        setUser({ email: registered?.email });
+      } else {
+        alert("user not exists");
+      }
     }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="flex flex-col justify-center items-center h-screen">
+      <div className="tabs">
+        <h2
+          onClick={() => toggle(true)}
+          className={`tab my-0 ${tab && "tab-active"} tab-lifted`}
+        >
+          Signin
+        </h2>
+        <h2
+          onClick={() => toggle(false)}
+          className={`tab my-0 tab-lifted ${!tab && "tab-active"} `}
+        >
+          Login
+        </h2>
+      </div>
       <div className="text-center w-96 shadow-md card bg-base-200">
         <form
           className="card-body "
@@ -34,7 +55,7 @@ const page = () => {
         >
           <div className="flex justify-center">
             <div className="chat flex justify-center w-32 chat-end">
-              <h2 className="chat-bubble my-0 ">Sign in</h2>
+              <h2 className="chat-bubble my-0 ">{!tab ? "Login" : "Signin"}</h2>
             </div>
           </div>
           <div className="form-control w-full ">
@@ -82,7 +103,7 @@ const page = () => {
             )}
           </div>
           <button className=" uppercase btn mt-4 " type="submit">
-            Sign in
+            {!tab ? "Login" : "Signin"}
           </button>
         </form>
       </div>

@@ -13,7 +13,7 @@ export const NoteProvider = ({ children }) => {
   const [forceUpdate, setForceUpdate] = useState(false);
   const [user, setUser] = useLocalStorage({
     key: "user",
-    defaultValue: { firstName: "", lastName: "", email: "" },
+    defaultValue: { email: "" },
   });
   const [state, setState] = useSetState({
     search: "",
