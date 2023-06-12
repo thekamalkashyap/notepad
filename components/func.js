@@ -9,18 +9,16 @@ async function allNotes() {
   if (token) {
     const data = jwt.verify(token, process.env.SECRET_KEY);
     const email = data?.email;
-    const todos = await sql`select * from notes where uid = ${email} order by is_checked, last_updated desc`;
+    const todos =
+      await sql`select * from notes where uid = ${email} order by is_checked, last_updated desc`;
     return todos;
   }
 }
 
 async function editNote(data, id) {
-  await sql`
-      update notes set title = ${data.get("title")}, body = ${data.get(
+  await sql`update notes set title = ${data.get("title")}, body = ${data.get(
     "body"
-  )}, last_updated = now() where id = ${id}
-      `;
-  console.log(`note : ${id} updated.`);
+  )}, last_updated = now() where id = ${id}`;
 }
 
 async function addNote(data) {
@@ -38,23 +36,16 @@ async function addNote(data) {
         uid: email,
       },
     ];
-    await sql`
-    insert into notes ${sql(notes)}
-    `;
-    console.log(`new note added!`);
+    await sql`insert into notes ${sql(notes)}`;
   }
 }
 
 async function deleteNote(id) {
   await sql`delete from notes where id = ${id}`;
-  console.log(`note : ${id} deleted.`);
 }
 
 async function checkNote(id, isChecked) {
-  await sql`
-      update notes set is_checked = ${isChecked}, last_updated = now() where id = ${id}
-      `;
-  console.log(`changed checked to ${isChecked} in note : ${id}`);
+  await sql`update notes set is_checked = ${isChecked}, last_updated = now() where id = ${id}`;
 }
 
 export { addNote, deleteNote, editNote, checkNote, allNotes };

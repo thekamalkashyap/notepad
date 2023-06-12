@@ -1,6 +1,8 @@
 import "./globals.css";
 import { NoteProvider } from "@/components/context";
 import { Navbar } from "@/components";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata = {
   title: "KNote",
@@ -21,6 +23,16 @@ export default function RootLayout({ children }) {
       <body className="prose max-w-none">
         <NoteProvider>
           <Navbar />
+          <ToastContainer
+            position="bottom-right"
+            autoClose={2500}
+            hideProgressBar
+            newestOnTop
+            closeOnClick
+            pauseOnFocusLoss
+            pauseOnHover
+            theme="dark"
+          />
           {children}
         </NoteProvider>
       </body>

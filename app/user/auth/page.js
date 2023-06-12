@@ -1,12 +1,14 @@
 "use client";
 import { useForm } from "react-hook-form";
-import { checkUser, addUser, getUser } from "../func";
+import { signin, login } from "../func";
 import { useNote } from "@/components/context";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const page = () => {
   const { setUser } = useNote();
   const [tab, toggle] = useState(true);
+
   const {
     register,
     handleSubmit,
@@ -14,22 +16,19 @@ const page = () => {
   } = useForm();
 
   const handleFrom = async (data) => {
-    const registered = await checkUser(data?.email);
-    if (!tab) {
-      if (!registered) {
-        addUser(data);
-        setUser({ email: data?.email });
-      } else {
-        alert("user already exists");
-      }
-    } else {
-      if (registered) {
-        await getUser(data, registered);
-        setUser({ email: registered?.email });
-      } else {
-        alert("user not exists");
-      }
-    }
+    tab
+      ? await signin(data)
+          .then(() => {
+            setUser({ email: data.email });
+            window.location.href = "/";
+          })
+          .catch((e) => toast.error(e.message))
+      : await login(data)
+          .then(() => {
+            setUser({ email: data.email });
+            window.location.href = "/";
+          })
+          .catch((e) => toast.error(e.message));
   };
 
   return (

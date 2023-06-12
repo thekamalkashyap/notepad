@@ -1,7 +1,5 @@
 create table users(
 id serial primary key,
-first_name varchar(50) not null,
-last_name varchar(50) not null,
 email varchar(150) not null unique,
 password varchar not null
 );

@@ -2,12 +2,13 @@
 import React, { useRef } from "react";
 import Image from "next/image";
 import { editNote } from "@/components";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useClickOutside } from "@mantine/hooks";
 import { useNote } from "./context";
 
 const EditModal = ({ id, title, body }) => {
   const descriptionRef = useRef();
   const [opened, handlers] = useDisclosure(false);
+  const modalRef = useClickOutside(() => handlers.close());
   const { rerender } = useNote();
 
   function auto_grow() {
@@ -17,7 +18,7 @@ const EditModal = ({ id, title, body }) => {
   }
 
   const hanldeSubmit = (formData) => {
-    editNote(formData, id);
+    (formData.get("title") || formData.get("body")) && editNote(formData, id);
     rerender();
   };
 
@@ -41,7 +42,7 @@ const EditModal = ({ id, title, body }) => {
         id={`modal${id}`}
         className={`modal ${opened && "modal-open"} cursor-pointer`}
       >
-        <div className="modal-box relative">
+        <div ref={modalRef} className="modal-box relative">
           <div
             onClick={() => {
               handlers.close();
@@ -80,7 +81,9 @@ const EditModal = ({ id, title, body }) => {
                 placeholder="Lorem ipsum sbi ajbsns, osih sjois!"
               />
             </div>
-            <button className="btn">Edit</button>
+            <button onClick={() => handlers.close()} className="btn">
+              Edit
+            </button>
           </form>
         </div>
       </div>

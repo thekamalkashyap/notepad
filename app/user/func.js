@@ -4,65 +4,61 @@ import * as jwt from "jsonwebtoken";
 import sql from "@/db";
 import { cookies } from "next/headers";
 
-async function checkUser(email) {
-  if (email) {
-    const users = await sql`select * from users where email = ${email}`;
-    if (users?.length != 0) {
-      return users[0];
-    } else {
-      return false;
-    }
+async function checkUserExists(email) {
+  const users = await sql`select * from users where email = ${email}`;
+  if (users?.length != 0) {
+    return users[0];
+  } else {
+    return undefined;
   }
 }
 
-async function getUser(formData, userData) {
+async function signin(formData) {
+  const email = formData.email;
   const cookieStore = cookies();
-  const email = formData?.email;
-  if (email) {
-    if (userData?.length != 0) {
-      bcrypt.compare(formData?.password, userData?.password).then((res) => {
+  const userData = await checkUserExists(email);
+  if (userData) {
+    let err = await bcrypt
+      .compare(formData.password, userData.password)
+      .then((res) => {
         if (res) {
           const token = jwt.sign({ email }, process.env.SECRET_KEY);
           cookieStore.set("jsonwebtoken", token);
-          console.log(`user Signed in!`);
+        } else {
+          return "Wrong password!";
         }
+      })
+      .catch(() => {
+        return "Something went wrong!";
       });
-    } else {
-      return false;
+    if (err) {
+      return Promise.reject(new Error(err));
     }
-  }
-}
-
-async function getEmail() {
-  const cookieStore = cookies();
-  const token = cookieStore.get("jsonwebtoken")?.value;
-  if (token) {
-    const data = jwt.verify(token, process.env.SECRET_KEY);
-    return data.email;
   } else {
-    return false;
+    return Promise.reject(new Error("User not found!"));
   }
 }
 
-async function addUser(data) {
-  const cookieStore = cookies();
+async function login(data) {
   const email = data.email;
-  bcrypt.hash(data.password, 8, async function (err, hash) {
-    const users = [
-      {
-        first_name: data.firstName,
-        last_name: data.lastName,
-        email: data.email,
-        password: hash,
-      },
-    ];
-    await sql`
-    insert into users ${sql(users)}
-    `;
-  });
-  const token = jwt.sign({ email }, process.env.SECRET_KEY);
-  cookieStore.set("jsonwebtoken", token);
-  console.log(`new user added!`);
+  const cookieStore = cookies();
+  const userData = await checkUserExists(email);
+  if (!userData) {
+    let err = bcrypt.hash(data.password, 8, async function (error, hash) {
+      if (error) {
+        return "Something went wrong!";
+      }
+      const users = [{ email: data.email, password: hash }];
+      await sql`insert into users ${sql(users)}`;
+    });
+    if (err) {
+      return Promise.reject(new Error(err));
+    }
+    const token = jwt.sign({ email }, process.env.SECRET_KEY);
+    cookieStore.set("jsonwebtoken", token);
+  } else {
+    return Promise.reject(new Error("User already exists!"));
+  }
 }
 
 async function logout() {
@@ -70,4 +66,4 @@ async function logout() {
   cookieStore.delete("jsonwebtoken");
 }
 
-export { addUser, checkUser, getEmail, getUser, logout };
+export { login, signin, logout };

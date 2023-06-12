@@ -3,10 +3,14 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import { addNote } from "@/components";
 import { useNote } from "./context";
+import { useDisclosure, useClickOutside } from "@mantine/hooks";
+import { toast } from "react-toastify";
 
 const AddModal = () => {
   const descriptionRef = useRef();
-  const { rerender } = useNote();
+  const [opened, handlers] = useDisclosure(false);
+  const modalRef = useClickOutside(() => handlers.close());
+  const { rerender, user } = useNote();
 
   function auto_grow() {
     descriptionRef.current.style.height = "6rem";
@@ -15,30 +19,35 @@ const AddModal = () => {
   }
 
   const handleSubmit = (formData) => {
-    addNote(formData);
+    if (user.email) {
+      (formData.get("title") || formData.get("body")) && addNote(formData);
+    } else {
+      toast.error("Please Signin to add notes");
+    }
     document.getElementById(`form-addnote`).reset();
     rerender();
   };
 
   return (
     <>
-      <label htmlFor={"addnote"} className={`btn gap-x-3 flex-nowrap `}>
+      <button
+        onClick={() => handlers.toggle()}
+        className="btn gap-x-4 flex-nowrap"
+      >
         <Image src={"/add.svg"} alt={`icon-addnote`} height={18} width={18} />
         <span>Add Note</span>
-      </label>
-      <input type="checkbox" id={"addnote"} className="modal-toggle" />
-      <label
+      </button>
+      <div
         id="modal-addnote"
-        htmlFor={"addnote"}
-        className="modal cursor-pointer"
+        className={`modal ${opened && "modal-open"} cursor-pointer`}
       >
-        <label className="modal-box relative" htmlFor={"addnote"}>
-          <label
-            htmlFor={"addnote"}
+        <div ref={modalRef} className="modal-box relative">
+          <div
+            onClick={() => handlers.close()}
             className="btn btn-sm btn-circle absolute right-2 top-2"
           >
             ✕
-          </label>
+          </div>
           <form
             className="flex gap-y-4 flex-col"
             id={`form-addnote`}
@@ -67,10 +76,12 @@ const AddModal = () => {
                 placeholder="Lorem ipsum sbi ajbsns, osih sjois!"
               />
             </div>
-            <button className="btn">Add</button>
+            <button onClick={() => handlers.close()} className="btn">
+              Add
+            </button>
           </form>
-        </label>
-      </label>
+        </div>
+      </div>
     </>
   );
 };
