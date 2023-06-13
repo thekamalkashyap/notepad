@@ -32,10 +32,10 @@ async function signin(formData) {
         return "Something went wrong!";
       });
     if (err) {
-      return Promise.reject(new Error(err));
+      return Promise.reject(err);
     }
   } else {
-    return Promise.reject(new Error("User not found!"));
+    return Promise.reject("User not found!");
   }
 }
 
@@ -52,12 +52,12 @@ async function login(data) {
       await sql`insert into users ${sql(users)}`;
     });
     if (err) {
-      return Promise.reject(new Error(err));
+      return Promise.reject(err);
     }
     const token = jwt.sign({ email }, process.env.SECRET_KEY);
     cookieStore.set("jsonwebtoken", token);
   } else {
-    return Promise.reject(new Error("User already exists!"));
+    return Promise.reject("User already exists!");
   }
 }
 

@@ -3,18 +3,17 @@ import { NoteProvider } from "@/components/context";
 import { Navbar } from "@/components";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import config from "@/config.json";
 
 export const metadata = {
-  title: "KNote",
-  description: "knote it down!",
+  title: config.title,
+  description: config.description,
   generator: "Next.js",
-  applicationName: "KNote",
+  applicationName: config.applicationName,
   referrer: "origin-when-cross-origin",
   keywords: ["Next.js", "React", "JavaScript"],
-  icons: "/moon/1.svg",
-  authors: [
-    { name: "kamal kashyap", url: "https://github.com/thekamalkashyap" },
-  ],
+  icons: config.icons,
+  authors: config.authors,
 };
 
 export default function RootLayout({ children }) {
