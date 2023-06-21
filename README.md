@@ -1,4 +1,4 @@
-# Tailwind Nextjs Starter Blog
+# Tailwind Nextjs Notes app
 
 [![Sponsor](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&link=https://github.com/sponsors/timlrx)](https://github.com/sponsors/thekamalkashyap/)
 
